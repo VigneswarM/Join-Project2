@@ -16,7 +16,7 @@ public class Student {
         department = Integer.parseInt(studentTuple.substring(28,31));
         program = Integer.parseInt(studentTuple.substring(31,34));
         sinNumber = Integer.parseInt(studentTuple.substring(34,43));
-        address = studentTuple.substring(43);
+        address = studentTuple.substring(43);      
     }
 
     public int ID;
@@ -27,6 +27,8 @@ public class Student {
     public int program;
     public int sinNumber;
 
+    
+    
     public String toString(){
         return ID + firstName + lastName + department + String.format ("%03d", program) + String.format ("%09d", sinNumber) + address;
     }

@@ -44,7 +44,7 @@ public class ChunkFileSplitter {
             while (_scanner.hasNextLine()) {
                 String line;
                 int lineCounter = 0;
-                String currentFileName= Constants.SORTED_FILE_PREFIX + "_"+fileCount+"_"+chunkCount + ".txt";
+                String currentFileName= Constants.SORTED_FILE_PREFIX + fileCount+"_"+chunkCount + ".txt";
                 
                 //ArrayList<String> unsortedLines = new ArrayList<String>();
                 ArrayList<byte[]> unsortedLines = new ArrayList<byte[]>();
@@ -55,7 +55,7 @@ public class ChunkFileSplitter {
                     lineCounter++;
                 }
                 
-                unsortedLines.sort(Comparator.comparing(s -> new String(s)));
+                //unsortedLines.sort(Comparator.comparing(s -> new String(s)));
                 bw = new BufferedWriter(new FileWriter(Constants.DATA_DIR+currentFileName, true));
                 for(byte[] s: unsortedLines) {
                     bw.write(new String(s));

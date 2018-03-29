@@ -17,13 +17,15 @@ public class BlockManager {
     OutputBlock _outputBlock;
     
     private int _fileCount;
-
-    public BlockManager(int fileCount,int tupleCountInBlock) {
+    private int _currFileNumber;
+    public BlockManager(int fileCount,int tupleCountInBlock,int currFileNumber) {
         _fileCount = fileCount;
+        _currFileNumber=currFileNumber;
         for (int i = 0; i < fileCount; i++) {
-            InputBlock ip = new InputBlock(Constants.SORTED_FILE_PREFIX + String.valueOf(i) + ".txt",tupleCountInBlock);
-            _inputBlocks.add(ip);
+             InputBlock ip = new InputBlock(Constants.SORTED_FILE_PREFIX +currFileNumber+"_"+ i + ".txt",tupleCountInBlock);
+             _inputBlocks.add(ip);
         }
+        System.out.println(_inputBlocks.size());
         _outputBlock = new OutputBlock(tupleCountInBlock);
 
         //System.out.println(_inputBlocks.size());
@@ -51,9 +53,15 @@ public class BlockManager {
         //System.out.println(blocks.size());
         InputBlock minInputBlock = blocks.get(0);
         for (InputBlock inputBlock : blocks) {
-            if (inputBlock.getCurrentData().ID < minInputBlock.getCurrentData().ID) {
-                minInputBlock = inputBlock;
-            }
+        	if(_currFileNumber==1){
+	            if (new Student(inputBlock.getCurrentData()).ID < new Student(minInputBlock.getCurrentData()).ID) {
+	                minInputBlock = inputBlock;
+	            }
+        	}else{
+        		 if (new StudentCourse(inputBlock.getCurrentData()).ID < new StudentCourse(minInputBlock.getCurrentData()).ID) {
+                     minInputBlock = inputBlock;
+                 }
+        	}
         }
         _outputBlock.add(minInputBlock.getCurrentData().toString());
         minInputBlock.getData();
@@ -61,8 +69,10 @@ public class BlockManager {
     
     
     public void loadBlocks() {
+    	System.out.println("Loadblocks for :: "+_currFileNumber+" "+_inputBlocks.size());
     	for(InputBlock inputBlock:_inputBlocks) {
     		inputBlock.load();
     	}
+    	
     }
 }

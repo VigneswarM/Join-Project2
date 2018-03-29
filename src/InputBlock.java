@@ -12,7 +12,7 @@ public class InputBlock extends Block{
     private int counter = -1;
     private String _fileName;
     LineNumberReader _reader;
-    ArrayList<Student> _currentBlock = new ArrayList<>();
+    ArrayList<String> _currentBlock = new ArrayList<>();
     
     public InputBlock(String fileName,int tupleCountInBlock) {
     	super(tupleCountInBlock);
@@ -27,7 +27,7 @@ public class InputBlock extends Block{
         }
     }
 
-    public Student getData() {
+    public String getData() {
         int nextDataIndex = computeNextDataIndex();
         return getRecord(nextDataIndex);
     }
@@ -49,7 +49,7 @@ public class InputBlock extends Block{
      * Returns the current data where the pointer currently pointing in the block
      * @return
      */
-    public Student getCurrentData() {
+    public String getCurrentData() {
         if(counter == -1) {
             getData();
         }
@@ -66,9 +66,9 @@ public class InputBlock extends Block{
     }
 
     private void loadNextBlockIntoMemory() {
-        _currentBlock = getBlock();
-        //Performance start
-        Performance.MergeReadDiskIO++;
+    	_currentBlock = getBlock();
+    	//Performance start
+	    Performance.MergeReadDiskIO++;
         //Performance end
     }
     
@@ -103,7 +103,7 @@ public class InputBlock extends Block{
      * It searches the tuple for the given index and returns a Student object.
      * @return Returns a Student object if the index is present or returns null
      */
-    private Student getRecord(int index) {
+    private String getRecord(int index) {
     	try{
 	        if(isDataAvailable()) {
 	            return _currentBlock.get(index);
@@ -123,16 +123,15 @@ public class InputBlock extends Block{
      * Converts those 40 tuples into list of Student Objects
      * @return List of Student objects
      */
-    public ArrayList<Student> getBlock()  {
-        ArrayList<Student> lines = new ArrayList<>();
+    public ArrayList<String> getBlock()  {
+        ArrayList<String> lines = new ArrayList<>();
         int lineCounter = 0;
         try{
             String line;
             while ( lineCounter < BLOCKSIZE  && ((line = _reader.readLine()) != null)) {
                 //System.out.println(line);
-                Student s=new Student(line);
                 //System.out.println("Object Created");
-                lines.add(s);
+                lines.add(line);
                 lineCounter = lineCounter + 1;
             }
         }
@@ -142,4 +141,5 @@ public class InputBlock extends Block{
         }
         return lines;
     }
+    
 }
