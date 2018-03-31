@@ -30,7 +30,7 @@ public class MMSMain {
 //	        }
 //    		long endTimeSplit   = System.nanoTime();
 //    		Performance.SplittingTime+=calcTotalTime(startTimeSplit,endTimeSplit);
-    	}
+ //   	}
     	
 	    NestedLoopJoin nestedLoopJoin=new NestedLoopJoin();
 	    nestedLoopJoin.execute();
