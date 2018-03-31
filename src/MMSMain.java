@@ -37,6 +37,18 @@ public class MMSMain {
     	
     	blockManager1.loadBlocks();
     	blockManager2.loadBlocks();
+    	
+    	blockManager1.execute();
+    	String min =blockManager1.Sortjoin();
+    	blockManager2.execute();
+    	
+    	boolean flag = blockManager2.Tuplecompare(min);
+    	System.out.println("end");
+    	
+    	System.out.println(blockManager2.outputblock);
+		
+    	
+    	
     }
     
     /**
