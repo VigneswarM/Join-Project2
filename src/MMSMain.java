@@ -16,39 +16,39 @@ public class MMSMain {
 	 * @throws Exception
 	 */
     public static void main(String[] args) throws Exception {  
-    	 	ArrayList<String> chunkFileList1=new ArrayList<>();
-	        ArrayList<String> chunkFileList2=new ArrayList<>();
-	        for(int fileCount = 1;fileCount<=Constants.FILE_COUNT;fileCount++){
-    		long startTimeSplit = System.nanoTime();		
-    		System.out.println(fileCount);
-	        ChunkFileSplitter chunkFileSplitter=new ChunkFileSplitter(Constants.INPUT_FILE+fileCount+".txt");
-	       
-	        if(fileCount==1) {
-	        	chunkFileList1=chunkFileSplitter.execute(Constants.BLOCK_COUNT1,fileCount);
-	        }else {
-	        	chunkFileList2=chunkFileSplitter.execute(Constants.BLOCK_COUNT2,fileCount);
-	        }
-    		long endTimeSplit   = System.nanoTime();
-    		Performance.SplittingTime+=calcTotalTime(startTimeSplit,endTimeSplit);
+//    	 	ArrayList<String> chunkFileList1=new ArrayList<>();
+//	        ArrayList<String> chunkFileList2=new ArrayList<>();
+//	        for(int fileCount = 1;fileCount<=Constants.FILE_COUNT;fileCount++){
+//    		long startTimeSplit = System.nanoTime();		
+//    		System.out.println(fileCount);
+//	        ChunkFileSplitter chunkFileSplitter=new ChunkFileSplitter(Constants.INPUT_FILE+fileCount+".txt");
+//	       
+//	        if(fileCount==1) {
+//	        	chunkFileList1=chunkFileSplitter.execute(Constants.BLOCK_COUNT1,fileCount);
+//	        }else {
+//	        	chunkFileList2=chunkFileSplitter.execute(Constants.BLOCK_COUNT2,fileCount);
+//	        }
+//    		long endTimeSplit   = System.nanoTime();
+//    		Performance.SplittingTime+=calcTotalTime(startTimeSplit,endTimeSplit);
     	}
     	
 	    NestedLoopJoin nestedLoopJoin=new NestedLoopJoin();
 	    nestedLoopJoin.execute();
 	    
-    	BlockManager blockManager1=new BlockManager(chunkFileList1.size(),Constants.TUPLE_COUNT1,1);
-    	BlockManager blockManager2=new BlockManager(chunkFileList2.size(),Constants.TUPLE_COUNT2,2);
-    	
-    	blockManager1.loadBlocks();
-    	blockManager2.loadBlocks();
-    	
-    	blockManager1.execute();
-    	String min =blockManager1.Sortjoin();
-    	blockManager2.execute();
-    	
-    	boolean flag = blockManager2.Tuplecompare(min);
-    	System.out.println("end");
-    	
-    	System.out.println(blockManager2.outputblock);
+//    	BlockManager blockManager1=new BlockManager(chunkFileList1.size(),Constants.TUPLE_COUNT1,1);
+//    	BlockManager blockManager2=new BlockManager(chunkFileList2.size(),Constants.TUPLE_COUNT2,2);
+//    	
+//    	blockManager1.loadBlocks();
+//    	blockManager2.loadBlocks();
+//    	
+//    	blockManager1.execute();
+//    	String min =blockManager1.Sortjoin();
+//    	blockManager2.execute();
+//    	
+//    	boolean flag = blockManager2.Tuplecompare(min);
+//    	System.out.println("end");
+//    	
+//    	System.out.println(blockManager2.outputblock);
 		
     	
     	
