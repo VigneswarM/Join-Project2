@@ -32,6 +32,9 @@ public class MMSMain {
     		Performance.SplittingTime+=calcTotalTime(startTimeSplit,endTimeSplit);
     	}
     	
+	    NestedLoopJoin nestedLoopJoin=new NestedLoopJoin();
+	    nestedLoopJoin.execute();
+	    
     	BlockManager blockManager1=new BlockManager(chunkFileList1.size(),Constants.TUPLE_COUNT1,1);
     	BlockManager blockManager2=new BlockManager(chunkFileList2.size(),Constants.TUPLE_COUNT2,2);
     	

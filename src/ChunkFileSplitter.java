@@ -55,7 +55,7 @@ public class ChunkFileSplitter {
                     lineCounter++;
                 }
                 
-                //unsortedLines.sort(Comparator.comparing(s -> new String(s)));
+                unsortedLines.sort(Comparator.comparing(s -> new String(s)));
                 bw = new BufferedWriter(new FileWriter(Constants.DATA_DIR+currentFileName, true));
                 for(byte[] s: unsortedLines) {
                     bw.write(new String(s));

@@ -10,7 +10,7 @@ public class Constants {
     public static int RAM_SIZE=(int)Runtime.getRuntime().freeMemory();
     public static int BLOCK_SIZE=4096;
     public static int BLOCK_COUNT1=(RAM_SIZE/BLOCK_SIZE)/2;
-    public static int BLOCK_COUNT2=(RAM_SIZE/BLOCK_SIZE)+(RAM_SIZE/BLOCK_SIZE)/2;
+    public static int BLOCK_COUNT2=(RAM_SIZE/BLOCK_SIZE);
     
     public static int TUPLE_COUNT1=40;
     public static int TUPLE_COUNT2=130;
