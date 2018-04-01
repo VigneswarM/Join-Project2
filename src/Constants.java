@@ -31,5 +31,4 @@ public class Constants {
     		return 1;
     	}
     }
-    
 }
