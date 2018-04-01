@@ -71,6 +71,7 @@ public class ChunkFileSplitter {
             _scanner.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            _scanner.close();
         }
         return chunkFileList;
     }

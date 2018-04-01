@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
@@ -60,169 +61,51 @@ public class BlockManager {
      * Fetches the next item only from the block from which the item is added to output
      * 
      */
-    public void execute() {
-    	
-    	System.out.println("inside execute");
-    	System.out.println(sublistCount.size());
-    	
-    	System.out.println(blocksnames1);
-    	System.out.println(blocksnames2);
-    	
-
-    	System.out.println("bags");
-    	System.out.println(bag1sublist);
-    	System.out.println(bag2sublist);
-    	
-    	
-    	
-    	
-    	/*for(int i=0;i<sublistCount.size();i++)
-    	{
-    		for(int j=0;j<sublistCount.get(i);j++)
-    		{
-    			if(i==0)
-    				blocks.add(Constants.SORTED_FILE_PREFIX+(i+1)+"_"+j+".txt");
-    			if(i==1)
-    				blocks.add(Constants.SORTED_FILE_PREFIX+(i+1)+"_"+j+".txt");
-    			
-    		}
-    		
-    	}
-   	
-    	System.out.println(blocks);
-    */	
-    	
-    }
-    
-    public String Sortjoin()
-    {
-    
-    	System.out.println("inside sort");
-     	//finding min val
-    	for(int i=0;i<sublistCount.size();i++)
-    	{
-    		try {
-
-    		   		for(int j=0;j<sublistCount.get(i);j++)
-    		{
-    			File file1=new File(Constants.DATA_DIR +Constants.SORTED_FILE_PREFIX+(i+1)+"_"+j+".txt");
-    			System.out.println(file1);
-		   	
-					Scanner s1=new Scanner(file1);
-					String line1=s1.nextLine();	
-    	    			
-    		if(min.equals("0"))
-    		min = line1;
-			else
-    		{
-					if(Integer.parseInt(min.substring(0,8)) > Integer.parseInt(line1.substring(0,8)))
-						min = line1;
-				}
-    		
-    		s1.close();	
-    		}
-    		
-    	}
-    	catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-
-    		
-    	System.out.println("min value"+min);		
-    	
-    	}
-		return min;
-
+    public String execute() {
+        List<InputBlock> blocks = _inputBlocks.stream().filter(x -> x.isDataAvailable()).collect(Collectors.toList());
+        //System.out.println(blocks.size());
+        InputBlock minInputBlock = blocks.get(0);
+        for (InputBlock inputBlock : blocks) {
+        	if(_currFileNumber==1){
+	            if (new Student(inputBlock.getCurrentData()).ID < new Student(minInputBlock.getCurrentData()).ID) {
+	                minInputBlock = inputBlock;
+	            }
+        	}else{
+        		 if (new StudentCourse(inputBlock.getCurrentData()).ID < new StudentCourse(minInputBlock.getCurrentData()).ID) {
+                     minInputBlock = inputBlock;
+                 }
+        	}
+        }
+        String currentMin = minInputBlock.getCurrentData().toString();
         //_outputBlock.add(minInputBlock.getCurrentData().toString());
-        //minInputBlock.getData();
-		/*   	*/
+        minInputBlock.getData();
+        return currentMin;
     }
     
     
-    boolean Tuplecompare(String comp) {
+   
+    
+    
+    boolean Tuplecompare(String minOfT1) {
 		boolean flag = false;
-		
-   		for(int j=0;j<_inputBlocks.size();j++)
-    		{
-  	
-   			File file1 = new File(Constants.DATA_DIR + Constants.SORTED_FILE_PREFIX +(sublistCount.size()+1)+"_"+j+".txt");
-   			System.out.println(file1);
-		try
-		{
-			
-			Scanner s1 = new Scanner(file1);
-			String line1 = s1.nextLine();
-			//System.out.println(line1);
-
-			while (s1.hasNextLine()) {
-				//System.out.println(line1);
-
-				if (Integer.parseInt(line1.substring(0, 8)) == Integer.parseInt(comp.substring(0, 8))) {
-					System.out.println("match");
-					outputblock.add((comp+line1));
-					System.out.println(line1);
-					matching++;
-					
-					line1 = s1.nextLine();
-					flag = true;
-				} else if (Integer.parseInt(line1.substring(0, 8)) > Integer.parseInt(comp.substring(0, 8))) {
-					 line1=s1.nextLine();
-				} else if (Integer.parseInt(line1.substring(0, 8)) < Integer.parseInt(comp.substring(0, 8))) {
-					line1 = s1.nextLine();
+   		for(InputBlock inputBlock:_inputBlocks){
+   			try {
+				for(String line:inputBlock._currentBlock){
+					if(line.substring(0, 8).equals(minOfT1.substring(0,8))){
+						_outputBlock.add(line+" "+minOfT1);
+					}
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-
-			if (Integer.parseInt(line1.substring(0, 8)) == Integer.parseInt(comp.substring(0, 8))) {
-				flag = true;
-			}
-			
-			s1.close();
-			
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-
-		System.out.println("no of matches:" +matching);
+   		}	
+   		return flag;
     }
-		return flag;
-	}
+	
 
 	public void loadBlocks() {
-		
-		sublistCount.add(_inputBlocks.size());
-		k++;
-    	System.out.println("Loadblocks for :: "+_currFileNumber+" "+_inputBlocks.size());
-
     	for(InputBlock inputBlock:_inputBlocks) {
     		inputBlock.load();
-    	}
-    	
-   	System.out.println("Sublistcount:"+sublistCount);
-   	
-    	  	for(int i=0;i<_inputBlocks.size();i++)	
-		{
-			if(k==0)
-			{	
-			blocksnames1.add(Constants.SORTED_FILE_PREFIX+_currFileNumber+"_"+i+".txt");
-			k++;
-			bag1sublist= _inputBlocks.size();
-
-	    	//System.out.println(blocksnames1);   
-	    	
-			}
-			else
-			{
-			blocksnames2.add(Constants.SORTED_FILE_PREFIX+_currFileNumber+"_"+i+".txt");
-			bag2sublist= _inputBlocks.size();
-
-	    	//System.out.println(blocksnames2);   
-	    		
-			}
-		}
-    		
-    	  
-    	  	
-    	  
-    	
+    	}   	  
     }
 }

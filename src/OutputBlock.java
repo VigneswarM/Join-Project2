@@ -25,13 +25,14 @@ public class OutputBlock extends Block{
      * 
      * It Also dumps the block to the output file when the
      * block is full
-     * 
+     * 	
      * @param data (Tuple of type Student)
      */
     public void add(String data) {
+    	//System.out.println("Block has added to buffer");
         counter = counter + 1;
         addToBuffer(counter, data);
-        if(counter == BLOCKSIZE*50*Constants.getMultiplier() - 1) {
+        if(counter == BLOCKSIZE*4 - 1) {
             writeToFile();
             counter = -1;
         }
