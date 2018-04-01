@@ -60,15 +60,15 @@ public class MMSMain {
      * @param endTime
      * @return
      */
-    public static long calcTotalTime(long startTime,long endTime){
+   /* public static long calcTotalTime(long startTime,long endTime){
     	long totalTime = endTime - startTime;
     	return totalTime;
-    }
+    }*/
     
     /**
      * Prints the performance metrics
      */
-    public  static void printPerformance(){
+ /*   public  static void printPerformance(){
     	    System.out.println("Disk I/O Performance with RAM size :: "+(Runtime.getRuntime().totalMemory())/(1024*1024)+"MB");
     	 	System.out.println("Disk I/O for Splitting and Sorting files :: "+Performance.SplitterDiskIO);
 	        System.out.println("Disk I/O for reading files during Merge :: "+ Performance.MergeReadDiskIO);
@@ -78,5 +78,5 @@ public class MMSMain {
 	        System.out.println("Time taken by Chunk File Splitter and Sorter :: "+Performance.SplittingTime/1000000000+"seconds");
 	        System.out.println("Time taken by Chunk File Merger :: "+Performance.MergingTime/1000000000+"seconds");
 	        System.out.println("Time taken for Bag Difference  :: "+Performance.BagDifferenceTime/1000000000+"seconds");
-    }
+    }*/
 }
