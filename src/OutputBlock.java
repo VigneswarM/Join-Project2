@@ -32,7 +32,7 @@ public class OutputBlock extends Block{
     	//System.out.println("Block has added to buffer");
         counter = counter + 1;
         addToBuffer(counter, data);
-        if(counter == BLOCKSIZE*4 - 1) {
+        if(counter == BLOCKSIZE - 1) {
             writeToFile();
             counter = -1;
         }

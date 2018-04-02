@@ -1,5 +1,23 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 public class MMSMain {
+	
+	 public static void mainq(String[] args) throws Exception {  
+		 //Merge merge = new Merge();
+		 //merge.execute();
+		 
+		Path source = Paths.get(Constants.DATA_DIR + "sorted_chunk_2_" + 88 + ".txt");
+		Path destination = Paths.get(Constants.DATA_DIR + "sorted_chunk_3_" + 50 + ".txt");
+		try {
+			Files.copy(source, destination);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	 }
 
 	/**
 	 * Loads the Input files
@@ -16,27 +34,39 @@ public class MMSMain {
 	 * @throws Exception
 	 */
     public static void main(String[] args) throws Exception {  
-    	 	ArrayList<String> chunkFileList1=new ArrayList<>();
-	        ArrayList<String> chunkFileList2=new ArrayList<>();
-	        for(int fileCount = 1;fileCount<=Constants.FILE_COUNT;fileCount++){
-	    		long startTimeSplit = System.nanoTime();		
-	    		System.out.println(fileCount);
-		        ChunkFileSplitter chunkFileSplitter=new ChunkFileSplitter(Constants.INPUT_FILE+fileCount+".txt");
-		       
-		        if(fileCount==1) {
-		        	chunkFileList1=chunkFileSplitter.execute(Constants.BLOCK_COUNT1, fileCount);
-		        }else {
-		        	chunkFileList2=chunkFileSplitter.execute(Constants.BLOCK_COUNT2, fileCount);
-		        }
-	    		long endTimeSplit   = System.nanoTime();
-	    		Performance.SplittingTime+=calcTotalTime(startTimeSplit,endTimeSplit);
-    	}
-	    
+    	
+		long start = System.nanoTime();
+		System.out.println(Constants.BLOCK_COUNT2);
+		
+	 	ArrayList<String> chunkFileList1=new ArrayList<>();
+        ArrayList<String> chunkFileList2=new ArrayList<>();
+        for(int fileCount = 1;fileCount<=Constants.FILE_COUNT;fileCount++){
+    		long startTimeSplit = System.nanoTime();		
+    		System.out.println(fileCount);
+	        ChunkFileSplitter chunkFileSplitter=new ChunkFileSplitter(Constants.INPUT_FILE+fileCount+".txt");
+	       
+	        if(fileCount==1) {
+	        	chunkFileList1=chunkFileSplitter.execute(Constants.BLOCK_COUNT1, fileCount, Constants.TUPLE_COUNT1);
+	        }else {
+	        	chunkFileList2=chunkFileSplitter.execute(Constants.BLOCK_COUNT2, fileCount, Constants.TUPLE_COUNT2);
+	        }
+    		long endTimeSplit   = System.nanoTime();
+    		Performance.SplittingTime+=calcTotalTime(startTimeSplit,endTimeSplit);
+        }
+        
+//		Merge merge = new Merge();
+//		merge.execute(chunkFileList2.size() - 1);
+        
+        long stop = System.nanoTime();
+	    long time = calcTotalTime(start, stop);
+	    System.out.println("Splitting Sorting " +time/1000000000 + "seconds");
+		    
+	    start = System.nanoTime();
 	    System.gc();
 	    
 	    System.out.println(Runtime.getRuntime().freeMemory());
 	    
-	    long start = System.nanoTime();
+	   // long start = System.nanoTime();
 	    
     	BlockManager blockManager1=new BlockManager(chunkFileList1.size(), Constants.TUPLE_COUNT1, 1);
     	BlockManager blockManager2=new BlockManager(chunkFileList2.size(), Constants.TUPLE_COUNT2, 2);
@@ -80,11 +110,12 @@ public class MMSMain {
         	}
         }
         
-        outputBlock.finish();
+       outputBlock.finish();
         
-	    long stop = System.nanoTime();
-	    long time = calcTotalTime(start, stop);
-	    System.out.println(time/1000000000 + "seconds");
+       stop = System.nanoTime();
+	   time = calcTotalTime(start, stop);
+        
+       System.out.println("Joining ime  " + time/1000000000 + "seconds");
 	    
     }
     

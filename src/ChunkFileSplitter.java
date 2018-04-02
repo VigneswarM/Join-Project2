@@ -36,7 +36,7 @@ public class ChunkFileSplitter {
      * @param blockCount
      * @return List of names of the chunk files that has been created
      */
-    public ArrayList<String> execute(int blockCount,int fileCount) {
+    public ArrayList<String> execute(int blockCount,int fileCount, int tupleCount) {
         int chunkCount=0;
         ArrayList<String> chunkFileList=new ArrayList<>();
         BufferedWriter bw = null;
@@ -49,7 +49,7 @@ public class ChunkFileSplitter {
                 //ArrayList<String> unsortedLines = new ArrayList<String>();
                 ArrayList<byte[]> unsortedLines = new ArrayList<byte[]>();
 
-                while ((lineCounter < blockCount * 40) && _scanner.hasNextLine() && ( line =_scanner.nextLine())!= null ) {
+                while ((lineCounter < blockCount * tupleCount) && _scanner.hasNextLine() && ( line =_scanner.nextLine())!= null ) {
                     //System.out.println(line);
                 	unsortedLines.add(line.getBytes());
                     lineCounter++;
