@@ -1,5 +1,3 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.util.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -9,11 +7,12 @@ public class NestedLoopJoin {
 	Scanner input1,input2;
 	File relation1,relation2;
     BufferedWriter bw;
+	InputStream in=null;
 
-    int lineCounter1 = 0,lineCounter2 = 0,dataSizeToBeLoaded=0;
-    HashMap<Integer,String> relation1Lines = new HashMap<>();
-    ArrayList<String> relation2Lines=new ArrayList<String>();
-
+    int lineCounter1 = 0,lineCounter2 = 0,dataSizeToBeLoaded=0,totalLineCount;
+    Map<Integer,byte[]> relation1Lines = new HashMap<>();
+    ArrayList<String> relation2Lines=new ArrayList<String>();    
+    
     private int calcSizeOfDataTobeLoaded(){
     	File smallRelation;
     	int availableRam=(int)Runtime.getRuntime().freeMemory();
@@ -28,12 +27,18 @@ public class NestedLoopJoin {
     		return (int)smallRelation.length()/(2*Constants.BLOCK_SIZE);
     	}
     }
-    public NestedLoopJoin(){
+    
+    
+    public NestedLoopJoin(int totCnt){
+    	this.totalLineCount=totCnt;
         try {
             relation1 =new File(Constants.DATA_DIR+"JoinT1.txt");
             relation2 =new File(Constants.DATA_DIR+"JoinT2.txt");
             input1=new Scanner(relation1);
             input2=new Scanner(relation2);
+            
+            in=new BufferedInputStream(new FileInputStream(relation1));
+
             
             FileWriter writer = new FileWriter(Constants.DATA_DIR + "output.txt", true);
             bw = new BufferedWriter(writer);
@@ -47,7 +52,6 @@ public class NestedLoopJoin {
 
     private ArrayList<String> loadT2Data(){
         int count=lineCounter2+Constants.TUPLE_COUNT2;
-        //System.out.println("Loading R2 :: "+count);
         while ((lineCounter2 < count) && input2.hasNextLine()) {
         	relation2Lines.add(input2.nextLine());
             lineCounter2++;
@@ -55,15 +59,42 @@ public class NestedLoopJoin {
         return relation2Lines;
     }
     
+    int curLineCnt=0;
+    
+    
+    private void readFile(int dataSize){
+    	System.gc();
+        byte[] temp=new byte[dataSize];
+        try{
+            in.read(temp,0,dataSize);
+            System.out.println(temp.length);
+       
+	        loadToMap(temp);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+    }
+    
+    private void loadToMap(byte[] temp){
+    	String line;
+        InputStream is = new ByteArrayInputStream(temp);
+        BufferedReader bfReader = new BufferedReader(new InputStreamReader(is));
+		try {
+			while(curLineCnt!=totalLineCount&&(line = bfReader.readLine()) != null){
+				//r1.add(new Student(line).ID);
+				relation1Lines.put(new Student(line).ID,line.getBytes());
+				curLineCnt++;
+			}
+			is.close();
+			bfReader.close();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+    }
     private void loadT1Data(){
-    	//System.out.println(lineCounter1+" "+dataSizeToBeLoaded+" "+Constants.TUPLE_COUNT1);
-        int count=lineCounter1+((dataSizeToBeLoaded/2)*Constants.TUPLE_COUNT1);
-        //System.out.println("Loading R1 :: "+count);
-    	while (lineCounter1 < count&& input1.hasNextLine()) {
-        	String curr=input1.nextLine();
-            relation1Lines.put(new Student(curr).ID,curr);
-            lineCounter1++;
-        }
+    	int size=dataSizeToBeLoaded*Constants.BLOCK_SIZE;
+    	readFile((size+46)/2);
     }
 
     public void execute() {
@@ -73,6 +104,7 @@ public class NestedLoopJoin {
         	loadT1Data();
             while(flag){
                 loadT2Data();
+                
                 if(relation2Lines.isEmpty()){
                     relation1Lines.clear();
                     loadT1Data();
@@ -84,25 +116,42 @@ public class NestedLoopJoin {
                     input2=new Scanner(relation2);
                     loadT2Data();
                 }
-                for(String str:relation2Lines){
-                	if(relation1Lines.containsKey(new StudentCourse(str).ID))
-                	{
-                		bw.write(relation1Lines.get(new StudentCourse(str).ID) + " "+str);
-                		bw.newLine();
-                	}
-                }
                 
+                writeToFile();
+        		bw.flush();
                 relation2Lines.clear();
-            }        
-            bw.close();
-            input1.close();
-            input2.close();
+            }     
+            System.out.println("Done!");
+            closeFilePointers();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+			System.out.println(e.getMessage());
         }
     }
+    
+    private void closeFilePointers(){
+    	try {
+			bw.close();
+			input1.close();
+	    	input2.close();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+    	
+    }
+    
+	private void writeToFile(){
+		for(String str:relation2Lines){
+	    	if(relation1Lines.containsKey(new StudentCourse(str).ID))
+	    	{
+	    		try {
+					bw.write(new String(relation1Lines.get(new StudentCourse(str).ID))+" "+str);
+		    		bw.newLine();
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
+	    	}
+	    }
+	}
 }
-
-
 
 
