@@ -54,22 +54,17 @@ public class MMSMain {
     		Performance.SplittingTime+=calcTotalTime(startTimeSplit,endTimeSplit);
         }
         
-//		Merge merge = new Merge();
-//		merge.execute(chunkFileList2.size() - 1);
+        Merge merge = new Merge();
+		int fileCount = merge.execute(chunkFileList2.size() - 1);
         
         long stop = System.nanoTime();
 	    long time = calcTotalTime(start, stop);
 	    System.out.println("Splitting Sorting " +time/1000000000 + "seconds");
 		    
 	    start = System.nanoTime();
-	    System.gc();
-	    
-	    System.out.println(Runtime.getRuntime().freeMemory());
-	    
-	   // long start = System.nanoTime();
 	    
     	BlockManager blockManager1=new BlockManager(chunkFileList1.size(), Constants.TUPLE_COUNT1, 1);
-    	BlockManager blockManager2=new BlockManager(chunkFileList2.size(), Constants.TUPLE_COUNT2, 2);
+    	BlockManager blockManager2=new BlockManager(fileCount, Constants.TUPLE_COUNT2, 3);
   	
     	LineCounter lineCounter=new LineCounter();
         int lineCount_1 =lineCounter.count(Constants.INPUT_FILE + 1 +".txt");

@@ -14,12 +14,12 @@ public class Merge {
 
     private static String result = "";
 
-    public void execute(int count) {
+    public int execute(int count) {
 		int j = 0;
 		for(int i=0; i<count; i = i+2){
 			String file_one = "sorted_chunk_2_"+i+".txt";
 			String file_two = "sorted_chunk_2_"+ (i + 1)  +".txt";
-			System.out.println(file_one + "#####" + file_two);
+			//System.out.println(file_one + "#####" + file_two);
 			merge(file_one, file_two, "sorted_chunk_3_"+ j + ".txt" );
 			j++;
 		}
@@ -29,11 +29,13 @@ public class Merge {
 			Path destination = Paths.get(Constants.DATA_DIR + "sorted_chunk_3_" + j + ".txt");
 			try {
 				Files.copy(source, destination);
+				j++;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		return j;
 	}
 
     private static void updateBuff(String s) {
