@@ -36,26 +36,26 @@ public class MMSMain {
     public static void main(String[] args) throws Exception {  
     	
 		long start = System.nanoTime();
-		System.out.println(Constants.BLOCK_COUNT2);
-		
-	 	ArrayList<String> chunkFileList1=new ArrayList<>();
-        ArrayList<String> chunkFileList2=new ArrayList<>();
-        for(int fileCount = 1;fileCount<=Constants.FILE_COUNT;fileCount++){
-    		long startTimeSplit = System.nanoTime();		
-    		System.out.println(fileCount);
-	        ChunkFileSplitter chunkFileSplitter=new ChunkFileSplitter(Constants.INPUT_FILE+fileCount+".txt");
-	       
-	        if(fileCount==1) {
-	        	chunkFileList1=chunkFileSplitter.execute(Constants.BLOCK_COUNT1, fileCount, Constants.TUPLE_COUNT1);
-	        }else {
-	        	chunkFileList2=chunkFileSplitter.execute(Constants.BLOCK_COUNT2, fileCount, Constants.TUPLE_COUNT2);
-	        }
-    		long endTimeSplit   = System.nanoTime();
-    		Performance.SplittingTime+=calcTotalTime(startTimeSplit,endTimeSplit);
-        }
-        
-        Merge merge = new Merge();
-		int fileCount = merge.execute(chunkFileList2.size() - 1);
+//		System.out.println(Constants.BLOCK_COUNT2);
+//		
+//	 	ArrayList<String> chunkFileList1=new ArrayList<>();
+//        ArrayList<String> chunkFileList2=new ArrayList<>();
+//        for(int fileCount = 1;fileCount<=Constants.FILE_COUNT;fileCount++){
+//    		long startTimeSplit = System.nanoTime();		
+//    		System.out.println(fileCount);
+//	        ChunkFileSplitter chunkFileSplitter=new ChunkFileSplitter(Constants.INPUT_FILE+fileCount+".txt");
+//	       
+//	        if(fileCount==1) {
+//	        	chunkFileList1=chunkFileSplitter.execute(Constants.BLOCK_COUNT1, fileCount, Constants.TUPLE_COUNT1);
+//	        }else {
+//	        	chunkFileList2=chunkFileSplitter.execute(Constants.BLOCK_COUNT2, fileCount, Constants.TUPLE_COUNT2);
+//	        }
+//    		long endTimeSplit   = System.nanoTime();
+//    		Performance.SplittingTime+=calcTotalTime(startTimeSplit,endTimeSplit);
+//        }
+//        
+//        Merge merge = new Merge();
+//		int fileCount = merge.execute(chunkFileList2.size() - 1);
         
         long stop = System.nanoTime();
 	    long time = calcTotalTime(start, stop);
@@ -63,8 +63,8 @@ public class MMSMain {
 		    
 	    start = System.nanoTime();
 	    
-    	BlockManager blockManager1=new BlockManager(chunkFileList1.size(), Constants.TUPLE_COUNT1, 1);
-    	BlockManager blockManager2=new BlockManager(fileCount, Constants.TUPLE_COUNT2, 3);
+    	BlockManager blockManager1=new BlockManager(2, Constants.TUPLE_COUNT1, 1);
+    	BlockManager blockManager2=new BlockManager(45, Constants.TUPLE_COUNT2, 3);
   	
     	LineCounter lineCounter=new LineCounter();
         int lineCount_1 =lineCounter.count(Constants.INPUT_FILE + 1 +".txt");
