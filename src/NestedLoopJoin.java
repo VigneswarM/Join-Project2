@@ -91,9 +91,7 @@ public class NestedLoopJoin {
 		
     }
     private void loadT1Data(){
-    	int size=dataSizeToBeLoaded*Constants.BLOCK_SIZE;
-    	System.out.println(size);
-    	readFile((size+46)/2);
+    	readFile(Constants.NESTED_LOOP_BLOCK_SIZE);
     }
 
     public void execute() {

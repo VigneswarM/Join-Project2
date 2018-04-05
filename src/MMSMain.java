@@ -75,7 +75,7 @@ public class MMSMain {
 	    start = System.nanoTime();
 	    
     	BlockManager blockManager1=new BlockManager(chunkFileList1.size(), Constants.TUPLE_COUNT1, 1);
-    	BlockManager blockManager2=new BlockManager(chunkFileList2.size(), Constants.TUPLE_COUNT2, 3);
+    	BlockManager blockManager2=new BlockManager(fileCount, Constants.TUPLE_COUNT2, 3);
   	
     
         System.out.println(Runtime.getRuntime().freeMemory());
