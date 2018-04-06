@@ -40,6 +40,7 @@ public class Merge {
 
     private static void updateBuff(String s) {
         if(buff.size() > 10000) {
+        	buff.add(s);
             writeBagDifferenceFile(buff);
             buff.clear();
         }
@@ -60,12 +61,12 @@ public class Merge {
             Scanner s2=new Scanner(file2);
             String line1=s1.nextLine(),line2=s2.nextLine();
             while(s1.hasNextLine()&&s2.hasNextLine()){
-                if(Integer.parseInt(line1.substring(0,8)) == Integer.parseInt(line2.substring(0,8))){
+            	if(Integer.parseInt(line1.substring(0,8)) == Integer.parseInt(line2.substring(0,8))){
                     updateBuff(line1);
-                    updateBuff(line2);
+                    updateBuff(line2);            	
                     line1=s1.nextLine();
                     line2=s2.nextLine();
-                }else if(Integer.parseInt(line1.substring(0,8))>Integer.parseInt(line2.substring(0,8))){
+               }else if(Integer.parseInt(line1.substring(0,8))>Integer.parseInt(line2.substring(0,8))){
                     updateBuff(line2);
                     line2=s2.nextLine();
                 }else if(Integer.parseInt(line1.substring(0,8))<Integer.parseInt(line2.substring(0,8))){

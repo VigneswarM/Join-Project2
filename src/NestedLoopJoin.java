@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 
 public class NestedLoopJoin {
-	Scanner input1,input2;
+	Scanner input2;
 	File relation1,relation2;
     BufferedWriter bw;
 	InputStream in=null;
@@ -34,7 +34,6 @@ public class NestedLoopJoin {
         try {
             relation1 =new File(Constants.DATA_DIR+"JoinT1.txt");
             relation2 =new File(Constants.DATA_DIR+"JoinT2.txt");
-            input1=new Scanner(relation1);
             input2=new Scanner(relation2);
             
             in=new BufferedInputStream(new FileInputStream(relation1));
@@ -67,7 +66,6 @@ public class NestedLoopJoin {
         byte[] temp=new byte[dataSize];
         try{
             in.read(temp,0,dataSize);
-            System.out.println(temp.length);
        
 	        loadToMap(temp);
 		} catch (Exception e) {
@@ -93,8 +91,7 @@ public class NestedLoopJoin {
 		
     }
     private void loadT1Data(){
-    	int size=dataSizeToBeLoaded*Constants.BLOCK_SIZE;
-    	readFile((size+46)/2);
+    	readFile(Constants.NESTED_LOOP_BLOCK_SIZE);
     }
 
     public void execute() {
@@ -120,7 +117,8 @@ public class NestedLoopJoin {
                 writeToFile();
         		bw.flush();
                 relation2Lines.clear();
-            }     
+            }    
+            relation1Lines.clear();
             System.out.println("Done!");
             closeFilePointers();
         } catch (Exception e) {
@@ -131,7 +129,6 @@ public class NestedLoopJoin {
     private void closeFilePointers(){
     	try {
 			bw.close();
-			input1.close();
 	    	input2.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -144,7 +141,7 @@ public class NestedLoopJoin {
 	    	if(relation1Lines.containsKey(new StudentCourse(str).ID))
 	    	{
 	    		try {
-					bw.write(new String(relation1Lines.get(new StudentCourse(str).ID))+" "+str);
+					bw.write(new String(relation1Lines.get(new StudentCourse(str).ID))+" "+str.substring(8));
 		    		bw.newLine();
 				} catch (Exception e) {
 					System.out.println(e.getMessage());

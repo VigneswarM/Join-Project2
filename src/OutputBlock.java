@@ -15,6 +15,9 @@ public class OutputBlock extends Block{
 
     private int counter = -1;
     ArrayList<String> _opBuffer=new ArrayList<>();
+    
+    private String _currentStudentId = "";
+	CgpaComputer cgpaComputer = new CgpaComputer();
 
     public OutputBlock(int tupleCountInBlock) {
     	super(tupleCountInBlock);
@@ -29,6 +32,19 @@ public class OutputBlock extends Block{
      * @param data (Tuple of type Student)
      */
     public void add(String data) {
+    	String StudentId = data.substring(0,8);
+    	
+    	if(!StudentId.equals(_currentStudentId)) {
+    		if(!_currentStudentId.equals("")) {
+    			cgpaComputer.compute(_currentStudentId);
+    		}
+    		_currentStudentId = StudentId;
+    	}
+    	
+    	String grade = data.substring(data.length() - 4).trim();
+    	
+    	//System.out.println(grade + "temp");
+    	cgpaComputer.addGrade(grade);
     	//System.out.println("Block has added to buffer");
         counter = counter + 1;
         addToBuffer(counter, data);
@@ -86,5 +102,6 @@ public class OutputBlock extends Block{
     
     public void finish() {
     	writeToFile();
+    	cgpaComputer.finish(_currentStudentId);
     }
 }

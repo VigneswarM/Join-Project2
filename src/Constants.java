@@ -12,7 +12,7 @@ public class Constants {
     public static int BLOCK_SIZE=4096;
     public static int BLOCK_COUNT1=(RAM_SIZE/BLOCK_SIZE)/2;
     public static int BLOCK_COUNT2=480;
-    
+    public static int NESTED_LOOP_BLOCK_SIZE=1261591;
     public static int TUPLE_COUNT1=40;
     public static int TUPLE_COUNT2=130;
     public static int FILE_COUNT=2;

@@ -35,6 +35,17 @@ public class MMSMain {
 	 */
     public static void main(String[] args) throws Exception {  
     	
+		
+		LineCounter lineCounter=new LineCounter();
+        int lineCount_1 =lineCounter.count(Constants.INPUT_FILE + 1 +".txt");
+        int lineCount_2 =lineCounter.count(Constants.INPUT_FILE + 2 +".txt");
+		
+        System.out.println(Runtime.getRuntime().freeMemory());
+	    NestedLoopJoin nestedLoopJoin=new NestedLoopJoin(lineCount_1);
+	    nestedLoopJoin.execute();
+	    
+	    System.gc();
+        System.out.println(Runtime.getRuntime().freeMemory());
 		long start = System.nanoTime();
 		System.out.println(Constants.BLOCK_COUNT2);
 		
@@ -66,9 +77,8 @@ public class MMSMain {
     	BlockManager blockManager1=new BlockManager(chunkFileList1.size(), Constants.TUPLE_COUNT1, 1);
     	BlockManager blockManager2=new BlockManager(fileCount, Constants.TUPLE_COUNT2, 3);
   	
-    	LineCounter lineCounter=new LineCounter();
-        int lineCount_1 =lineCounter.count(Constants.INPUT_FILE + 1 +".txt");
-        int lineCount_2 =lineCounter.count(Constants.INPUT_FILE + 2 +".txt");
+    
+        System.out.println(Runtime.getRuntime().freeMemory());
         
     	String min_1 =blockManager1.execute();
     	String min_2 =blockManager2.execute();
@@ -106,12 +116,24 @@ public class MMSMain {
         }
         
        outputBlock.finish();
+       
+       //blockManager1.finish();
+       
+       //blockManager2.finish();
         
        stop = System.nanoTime();
 	   time = calcTotalTime(start, stop);
         
-       System.out.println("Joining ime  " + time/1000000000 + "seconds");
-	    
+       System.out.println("Sort based Joining time  " + time/1000000000 + "seconds");
+       
+       System.gc();
+       start = System.nanoTime();
+       
+    
+       stop = System.nanoTime();
+       
+       time = calcTotalTime(start, stop);     
+       System.out.println("Nested loop Joining ime  " + time/1000000000 + "seconds");	    
     }
     
     /**
