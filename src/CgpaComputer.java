@@ -53,10 +53,11 @@ public class CgpaComputer {
 		writeToFile(currStudentId,cgpa);
 	}
 	
-	private void writeToFile(String studentId, double cgpa){
+	public void writeToFile(String studentId, double cgpa){
 		try {
 			bw.write(studentId+" "+cgpa);
     		bw.newLine();
+    		bw.flush();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}			    

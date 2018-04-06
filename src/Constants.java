@@ -1,7 +1,7 @@
 import java.lang.Runtime;
 
 public class Constants {
-    public static String DATA_DIR = "C:\\Users\\v_mourou\\Desktop\\data\\";
+    public static String DATA_DIR = "C:\\Users\\vaish\\Desktop\\data\\";
     public static String UNSORTED_FILE_PREFIX = "unsorted_chunk_";
     public static String SORTED_FILE_PREFIX = "sorted_chunk_";
     public static String INPUT_FILE = "JoinT";
