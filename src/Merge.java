@@ -20,13 +20,13 @@ public class Merge {
 			String file_one = "sorted_chunk_2_"+i+".txt";
 			String file_two = "sorted_chunk_2_"+ (i + 1)  +".txt";
 			//System.out.println(file_one + "#####" + file_two);
-			merge(file_one, file_two, "sorted_chunk_3_"+ j + ".txt" );
+			merge(file_one, file_two, "sorted_chunk_2_"+ j + ".txt" );
 			j++;
 		}
 		
 		if(count %2 == 0){
-			Path source = Paths.get(Constants.DATA_DIR + "sorted_chunk_2_" + count + ".txt");
-			Path destination = Paths.get(Constants.DATA_DIR + "sorted_chunk_3_" + j + ".txt");
+			Path source = Paths.get(Constants.TEMP_DIR + "sorted_chunk_2_" + count + ".txt");
+			Path destination = Paths.get(Constants.DATA_DIR + "sorted_chunk_2_" + j + ".txt");
 			try {
 				Files.copy(source, destination);
 				j++;
@@ -54,8 +54,8 @@ public class Merge {
     	boolean added_s1 = false;
     	boolean added_s2 = false;
         result = resultFileName;
-        File file1=new File(Constants.DATA_DIR + opFile1);
-        File file2=new File(Constants.DATA_DIR + opFile2);
+        File file1=new File(Constants.TEMP_DIR + opFile1);
+        File file2=new File(Constants.TEMP_DIR + opFile2);
         try {
             Scanner s1=new Scanner(file1);
             Scanner s2=new Scanner(file2);
