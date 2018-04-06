@@ -10,11 +10,11 @@ public class CgpaComputer {
 	HashMap<String,Double> gradesList=new HashMap<>();
 	BufferedWriter bw;
 	
-	public CgpaComputer(){
+	public CgpaComputer(String fileName){
 		initGradesList();
 		FileWriter writer;
 		try {
-			writer = new FileWriter(Constants.DATA_DIR + "GPA.txt", true);
+			writer = new FileWriter(Constants.DATA_DIR + fileName, true);
 	        bw = new BufferedWriter(writer);
 		} catch (IOException e) {
 			System.out.println(e.getMessage());

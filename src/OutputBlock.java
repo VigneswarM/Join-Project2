@@ -17,7 +17,7 @@ public class OutputBlock extends Block{
     ArrayList<String> _opBuffer=new ArrayList<>();
     
     private String _currentStudentId = "";
-	CgpaComputer cgpaComputer = new CgpaComputer();
+	CgpaComputer cgpaComputer = new CgpaComputer(Constants.GPA_SBJ);
 
     public OutputBlock(int tupleCountInBlock) {
     	super(tupleCountInBlock);

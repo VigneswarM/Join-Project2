@@ -16,7 +16,8 @@ public class NestedLoopJoin {
     ArrayList<String> relation2Lines=new ArrayList<String>();    
 
     HashMap<Integer,GradesData> cgpaSet=new HashMap<>();  
-    CgpaComputer cgpaComputer=new CgpaComputer();
+    
+    CgpaComputer cgpaComputer=new CgpaComputer(Constants.GPA_NLJ);
     
     private int calcSizeOfDataTobeLoaded(){
     	File smallRelation;
@@ -124,7 +125,7 @@ public class NestedLoopJoin {
                 relation2Lines.clear();
             }    
             relation1Lines.clear();
-            System.out.println("Done!");
+            System.out.println("NLJ Done!");
             closeFilePointers();
         } catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -135,6 +136,7 @@ public class NestedLoopJoin {
     	try {
 			bw.close();
 	    	input2.close();
+	    	cgpaComputer.bw.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
