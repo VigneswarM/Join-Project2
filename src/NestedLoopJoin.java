@@ -66,7 +66,6 @@ public class NestedLoopJoin {
     
     
     private void readFile(int dataSize){
-    	System.gc();
         byte[] temp=new byte[dataSize];
         try{
             in.read(temp,0,dataSize);
@@ -137,6 +136,7 @@ public class NestedLoopJoin {
 			bw.close();
 	    	input2.close();
 	    	cgpaComputer.bw.close();
+	    	cgpaSet.clear();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

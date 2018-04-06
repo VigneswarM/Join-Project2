@@ -1,8 +1,13 @@
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Scanner;
 public class MMSMain {
 	
 	 public static void mainq(String[] args) throws Exception {  
@@ -18,6 +23,17 @@ public class MMSMain {
 			e.printStackTrace();
 		}
 	 }
+	 
+	 public static void readFile(int dataSize){
+	        byte[] temp=new byte[dataSize];
+	        try{
+	        	File relation1 =new File(Constants.DATA_DIR+"JoinT1.txt");
+	            InputStream in=new BufferedInputStream(new FileInputStream(relation1));
+	            in.read(temp,0,dataSize);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+	    }
 
 	/**
 	 * Loads the Input files
@@ -35,28 +51,42 @@ public class MMSMain {
 	 */
     public static void main(String[] args) throws Exception {  
     	
-		
+    	long start = System.nanoTime();
 		LineCounter lineCounter=new LineCounter();
         int lineCount_1 =lineCounter.count(Constants.INPUT_FILE + 1 +".txt");
         int lineCount_2 =lineCounter.count(Constants.INPUT_FILE + 2 +".txt");
-
-	    NestedLoopJoin nestedLoopJoin=new NestedLoopJoin(lineCount_1);
+        NLJ(lineCount_1);
+        SBJ(lineCount_1, lineCount_2);
+        long stop = System.nanoTime();
+        System.out.println(calcTotalTime(start, stop)/1000000000 + "Seconds");
+    }
+    
+    public static void NLJ(int lineCount_1) {
+		NestedLoopJoin nestedLoopJoin=new NestedLoopJoin(lineCount_1);
 	    nestedLoopJoin.execute();
-		
-	 	ArrayList<String> chunkFileList1=new ArrayList<>();
+    }
+    
+    public static int Merge(int size){
+    	Merge merge = new Merge();
+		int fileCount = merge.execute(size - 1);
+		return fileCount;
+    }
+    
+    public static void SBJ(int lineCount_1, int lineCount_2){
+    	ArrayList<String> chunkFileList1=new ArrayList<>();
         ArrayList<String> chunkFileList2=new ArrayList<>();
+        ChunkFileSplitter chunkFileSplitter = null;
         for(int fileCount = 1;fileCount<=Constants.FILE_COUNT;fileCount++){
 	        if(fileCount==1) {
-				ChunkFileSplitter chunkFileSplitter=new ChunkFileSplitter(Constants.INPUT_FILE+fileCount+".txt",false);
+				chunkFileSplitter=new ChunkFileSplitter(Constants.INPUT_FILE+fileCount+".txt",false);
 	        	chunkFileList1=chunkFileSplitter.execute(Constants.BLOCK_COUNT1, fileCount, Constants.TUPLE_COUNT1);
 	        }else {
-				ChunkFileSplitter chunkFileSplitter=new ChunkFileSplitter(Constants.INPUT_FILE+fileCount+".txt",true);
+				chunkFileSplitter=new ChunkFileSplitter(Constants.INPUT_FILE+fileCount+".txt",true);
 	        	chunkFileList2=chunkFileSplitter.execute(Constants.BLOCK_COUNT2, fileCount, Constants.TUPLE_COUNT2);
 	        }
         }
-        
-        Merge merge = new Merge();
-		int fileCount = merge.execute(chunkFileList2.size() - 1);
+	    
+        int fileCount = Merge(chunkFileList2.size());
 
 	    SortJoin sortJoin = new SortJoin(chunkFileList1.size(), fileCount, lineCount_1, lineCount_2);
 	    sortJoin.execute();
