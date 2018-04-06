@@ -41,8 +41,8 @@ public class MMSMain {
         int lineCount_2 =lineCounter.count(Constants.INPUT_FILE + 2 +".txt");
 		
         System.out.println(Runtime.getRuntime().freeMemory());
-	    NestedLoopJoin nestedLoopJoin=new NestedLoopJoin(lineCount_1);
-	    nestedLoopJoin.execute();
+	    //NestedLoopJoin nestedLoopJoin=new NestedLoopJoin(lineCount_1);
+	    //nestedLoopJoin.execute();
 	    
 	    System.gc();
         System.out.println(Runtime.getRuntime().freeMemory());
@@ -54,11 +54,13 @@ public class MMSMain {
         for(int fileCount = 1;fileCount<=Constants.FILE_COUNT;fileCount++){
     		long startTimeSplit = System.nanoTime();		
     		System.out.println(fileCount);
-	        ChunkFileSplitter chunkFileSplitter=new ChunkFileSplitter(Constants.INPUT_FILE+fileCount+".txt");
+
 	       
 	        if(fileCount==1) {
+				ChunkFileSplitter chunkFileSplitter=new ChunkFileSplitter(Constants.INPUT_FILE+fileCount+".txt",false);
 	        	chunkFileList1=chunkFileSplitter.execute(Constants.BLOCK_COUNT1, fileCount, Constants.TUPLE_COUNT1);
 	        }else {
+				ChunkFileSplitter chunkFileSplitter=new ChunkFileSplitter(Constants.INPUT_FILE+fileCount+".txt",true);
 	        	chunkFileList2=chunkFileSplitter.execute(Constants.BLOCK_COUNT2, fileCount, Constants.TUPLE_COUNT2);
 	        }
     		long endTimeSplit   = System.nanoTime();
@@ -73,53 +75,9 @@ public class MMSMain {
 	    System.out.println("Splitting Sorting " +time/1000000000 + "seconds");
 		    
 	    start = System.nanoTime();
-	    
-    	BlockManager blockManager1=new BlockManager(chunkFileList1.size(), Constants.TUPLE_COUNT1, 1);
-    	BlockManager blockManager2=new BlockManager(fileCount, Constants.TUPLE_COUNT2, 3);
-  	
-    
-        System.out.println(Runtime.getRuntime().freeMemory());
-        
-    	String min_1 =blockManager1.execute();
-    	String min_2 =blockManager2.execute();
-    	
-    	int lineCounter_1 = 1;
-    	int lineCounter_2 = 1;
-    	
-    	OutputBlock outputBlock = new OutputBlock(Constants.TUPLE_COUNT1);
-    	
-        while(lineCounter_2 < lineCount_2){
-        	int student_id_min_1 = Integer.parseInt(min_1.substring(0,8));
-        	int student_id_min_2 = Integer.parseInt(min_2.substring(0,8));
-        	if(student_id_min_1 < student_id_min_2){
-        		min_1 = blockManager1.execute();
-        		lineCounter_1++;
-        	}
-        	else if(student_id_min_1  > student_id_min_2){
-        		min_2 = blockManager2.execute();
-        		lineCounter_2++;
-        	}
-        	else if(student_id_min_1  == student_id_min_2){
-        		outputBlock.add(min_1 + min_2.substring(8));
-        		//System.out.println(Runtime.getRuntime().freeMemory());
-        		min_2 = blockManager2.execute();
-        		lineCounter_2++;
-        	}
-        	
-        	if(!(lineCounter_1 < lineCount_1)){
-        		int student_id_1 = Integer.parseInt(min_1.substring(0,8));
-            	int student_id_2 = Integer.parseInt(min_2.substring(0,8));
-        		if(!(student_id_1 == student_id_2)){
-        			break;
-        		}
-        	}
-        }
-        
-       outputBlock.finish();
-       
-       //blockManager1.finish();
-       
-       //blockManager2.finish();
+
+	    SortJoin sortJoin = new SortJoin(chunkFileList1.size(), fileCount, lineCount_1, lineCount_2);
+	    sortJoin.execute();
         
        stop = System.nanoTime();
 	   time = calcTotalTime(start, stop);

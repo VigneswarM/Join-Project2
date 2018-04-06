@@ -2,19 +2,19 @@ public class SortJoin {
 
     private int fileCount_1 = 0;
     private int fileCount_2 = 0;
+    private int lineCount_1 = 0;
+    private int lineCount_2 = 0;
 
-    public SortJoin(int fileCount1, int fileCount2){
+    public SortJoin(int fileCount1, int fileCount2, int lineCount1, int linCount2){
         fileCount_1 = fileCount1;
         fileCount_2 = fileCount2;
+        lineCount_1 = lineCount1;
+        lineCount_2 = linCount2;
     }
 
     public void execute() {
         BlockManager blockManager1=new BlockManager(fileCount_1, Constants.TUPLE_COUNT1, 1);
         BlockManager blockManager2=new BlockManager(fileCount_2, Constants.TUPLE_COUNT2, 2);
-
-        LineCounter lineCounter=new LineCounter();
-        int lineCount_1 =lineCounter.count(Constants.INPUT_FILE + 1 +".txt");
-        int lineCount_2 =lineCounter.count(Constants.INPUT_FILE + 2 +".txt");
 
         String min_1 =blockManager1.execute();
         String min_2 =blockManager2.execute();
