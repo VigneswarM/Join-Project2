@@ -39,23 +39,13 @@ public class MMSMain {
 		LineCounter lineCounter=new LineCounter();
         int lineCount_1 =lineCounter.count(Constants.INPUT_FILE + 1 +".txt");
         int lineCount_2 =lineCounter.count(Constants.INPUT_FILE + 2 +".txt");
-		
-        System.out.println(Runtime.getRuntime().freeMemory());
-	    //NestedLoopJoin nestedLoopJoin=new NestedLoopJoin(lineCount_1);
-	    //nestedLoopJoin.execute();
-	    
-	    System.gc();
-        System.out.println(Runtime.getRuntime().freeMemory());
-		long start = System.nanoTime();
-		System.out.println(Constants.BLOCK_COUNT2);
+
+	    NestedLoopJoin nestedLoopJoin=new NestedLoopJoin(lineCount_1);
+	    nestedLoopJoin.execute();
 		
 	 	ArrayList<String> chunkFileList1=new ArrayList<>();
         ArrayList<String> chunkFileList2=new ArrayList<>();
         for(int fileCount = 1;fileCount<=Constants.FILE_COUNT;fileCount++){
-    		long startTimeSplit = System.nanoTime();		
-    		System.out.println(fileCount);
-
-	       
 	        if(fileCount==1) {
 				ChunkFileSplitter chunkFileSplitter=new ChunkFileSplitter(Constants.INPUT_FILE+fileCount+".txt",false);
 	        	chunkFileList1=chunkFileSplitter.execute(Constants.BLOCK_COUNT1, fileCount, Constants.TUPLE_COUNT1);
@@ -63,35 +53,14 @@ public class MMSMain {
 				ChunkFileSplitter chunkFileSplitter=new ChunkFileSplitter(Constants.INPUT_FILE+fileCount+".txt",true);
 	        	chunkFileList2=chunkFileSplitter.execute(Constants.BLOCK_COUNT2, fileCount, Constants.TUPLE_COUNT2);
 	        }
-    		long endTimeSplit   = System.nanoTime();
-    		Performance.SplittingTime+=calcTotalTime(startTimeSplit,endTimeSplit);
         }
         
         Merge merge = new Merge();
 		int fileCount = merge.execute(chunkFileList2.size() - 1);
-        
-        long stop = System.nanoTime();
-	    long time = calcTotalTime(start, stop);
-	    System.out.println("Splitting Sorting " +time/1000000000 + "seconds");
-		    
-	    start = System.nanoTime();
 
 	    SortJoin sortJoin = new SortJoin(chunkFileList1.size(), fileCount, lineCount_1, lineCount_2);
 	    sortJoin.execute();
-        
-       stop = System.nanoTime();
-	   time = calcTotalTime(start, stop);
-        
-       System.out.println("Sort based Joining time  " + time/1000000000 + "seconds");
-       
-       System.gc();
-       start = System.nanoTime();
-       
-    
-       stop = System.nanoTime();
-       
-       time = calcTotalTime(start, stop);     
-       System.out.println("Nested loop Joining ime  " + time/1000000000 + "seconds");	    
+
     }
     
     /**
