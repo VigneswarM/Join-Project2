@@ -12,12 +12,14 @@ public class ChunkFileSplitter {
     private String _chunkFileName;
     LineNumberReader _reader;
     Scanner _scanner;
+    boolean istemp = false;
 
     /**
      * @param fileName Input File Name that has to be splitted
      */
-    public ChunkFileSplitter(String fileName){
+    public ChunkFileSplitter(String fileName, boolean isTrue){
         try {
+            istemp = isTrue;
             _chunkFileName="data";
             String fullPathToFile = Constants.DATA_DIR + fileName;
             File file = new File(fullPathToFile);
@@ -56,7 +58,9 @@ public class ChunkFileSplitter {
                 }
                 
                 unsortedLines.sort(Comparator.comparing(s -> new String(s)));
-                bw = new BufferedWriter(new FileWriter(Constants.DATA_DIR+currentFileName, true));
+                String fileDir = istemp ? Constants.TEMP_DIR : Constants.DATA_DIR;
+
+                bw = new BufferedWriter(new FileWriter(fileDir + currentFileName, true));
                 for(byte[] s: unsortedLines) {
                     bw.write(new String(s));
                     bw.newLine();
