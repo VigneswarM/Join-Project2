@@ -9,31 +9,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 public class MMSMain {
-	
-	 public static void mainq(String[] args) throws Exception {  
-		 //Merge merge = new Merge();
-		 //merge.execute();
-		 
-		Path source = Paths.get(Constants.DATA_DIR + "sorted_chunk_2_" + 88 + ".txt");
-		Path destination = Paths.get(Constants.DATA_DIR + "sorted_chunk_3_" + 50 + ".txt");
-		try {
-			Files.copy(source, destination);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	 }
-	 
-	 public static void readFile(int dataSize){
-	        byte[] temp=new byte[dataSize];
-	        try{
-	        	File relation1 =new File(Constants.DATA_DIR+"JoinT1.txt");
-	            InputStream in=new BufferedInputStream(new FileInputStream(relation1));
-	            in.read(temp,0,dataSize);
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
-	    }
 
 	/**
 	 * Loads the Input files
@@ -51,13 +26,19 @@ public class MMSMain {
 	 */
     public static void main(String[] args) throws Exception {  
     	
-    	long start = System.nanoTime();
 		LineCounter lineCounter=new LineCounter();
         int lineCount_1 =lineCounter.count(Constants.INPUT_FILE + 1 +".txt");
         int lineCount_2 =lineCounter.count(Constants.INPUT_FILE + 2 +".txt");
+    	long start = System.nanoTime();
         NLJ(lineCount_1);
-        SBJ(lineCount_1, lineCount_2);
         long stop = System.nanoTime();
+        System.out.print("NLJ Done! Time Taken:");
+        System.out.println(calcTotalTime(start, stop)/1000000000 + "Seconds");
+
+    	start = System.nanoTime();
+        SBJ(lineCount_1, lineCount_2);
+        stop = System.nanoTime();
+        System.out.print("SBJ Done!!! Time Taken:");
         System.out.println(calcTotalTime(start, stop)/1000000000 + "Seconds");
     }
     
@@ -67,9 +48,14 @@ public class MMSMain {
     }
     
     public static int Merge(int size){
+    	long start = System.nanoTime();
     	Merge merge = new Merge();
 		int fileCount = merge.execute(size - 1);
+		long stop = System.nanoTime();
+		/*System.out.print("Merge Done!!! Time Taken:");
+		System.out.println(calcTotalTime(start, stop)/1000000000 + "Seconds");*/
 		return fileCount;
+		
     }
     
     public static void SBJ(int lineCount_1, int lineCount_2){
@@ -89,8 +75,11 @@ public class MMSMain {
         int fileCount = Merge(chunkFileList2.size());
 
 	    SortJoin sortJoin = new SortJoin(chunkFileList1.size(), fileCount, lineCount_1, lineCount_2);
+	    long start = System.nanoTime();
 	    sortJoin.execute();
-
+	    long stop = System.nanoTime();
+		System.out.print("Sort Join Done!!! Time Taken:");
+		System.out.println(calcTotalTime(start, stop)/1000000000 + "Seconds");
     }
     
     /**

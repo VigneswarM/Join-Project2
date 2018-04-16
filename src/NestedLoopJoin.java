@@ -124,7 +124,6 @@ public class NestedLoopJoin {
                 relation2Lines.clear();
             }    
             relation1Lines.clear();
-            System.out.println("NLJ Done!");
             closeFilePointers();
         } catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -163,25 +162,35 @@ public class NestedLoopJoin {
 	
 	private void writeCgpa(){
 		for (Map.Entry<Integer, GradesData> entry : cgpaSet.entrySet())
-		{
-		    //System.out.println(entry.getKey() + "/" + entry.getValue().grade+"/"+entry.getValue().cnt);
-		    double cgpa = entry.getValue().grade / entry.getValue().cnt;
-		    cgpa=(double)Math.round(cgpa * 100d) / 100d;
-		    cgpaComputer.writeToFile(entry.getKey().toString(),cgpa);
+		{		
+			if(entry.getValue().cnt >= 1000) {
+				    cgpaComputer.writeToFile(entry.getKey().toString(),0.0);
+			}  else {
+				//System.out.println(entry.getKey() + "/" + entry.getValue().grade+"/"+entry.getValue().cnt);
+				double cgpa = entry.getValue().grade / entry.getValue().cnt;
+		    	cgpa=(double)Math.round(cgpa * 100d) / 100d;
+		    	cgpaComputer.writeToFile(entry.getKey().toString(),cgpa);
+		    }
 		}
 	}
 	
 	private void populateCgpaMap3(Integer studentID,String grade){
 		Double currGrade=cgpaComputer.gradesList.get(grade);
-		if(!cgpaSet.containsKey(studentID)){
+		if(!cgpaSet.containsKey(studentID)) {
 			GradesData gradesData = new GradesData(currGrade,1);
 			cgpaSet.put(studentID,gradesData);
-		}else{
+			
+		}else {
 			GradesData existingGradesData = cgpaSet.get(studentID);
 			existingGradesData.grade += currGrade;
 			existingGradesData.cnt+=1;
 			existingGradesData.grade = (double)Math.round((existingGradesData.grade) * 100d) / 100d;
 			cgpaSet.put(studentID,existingGradesData);
+			
+		}		
+		if(grade.equals("Fail")) {
+			GradesData gradesDataFail = new GradesData(0.0,1000);
+			cgpaSet.put(studentID,gradesDataFail);
 		}
 	}
 	

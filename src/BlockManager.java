@@ -38,7 +38,7 @@ public class BlockManager {
              InputBlock ip = new InputBlock(Constants.SORTED_FILE_PREFIX +currFileNumber+"_"+ i + ".txt",tupleCountInBlock);
              _inputBlocks.add(ip);
         }
-        System.out.println(_inputBlocks.size());
+        //System.out.println(_inputBlocks.size());
         _outputBlock = new OutputBlock(tupleCountInBlock);
 
         //System.out.println(_inputBlocks.size());
